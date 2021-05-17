@@ -36,7 +36,7 @@ class PostServiceImpl(
             size: Int,
             searchCriteria: SearchCriteria?,
             authentication: Authentication
-    ) = postRepository.findAll(PostSpecification(searchCriteria, authentication), PageRequest.of(page, size)).let {
+    ) = postRepository.findAll(PostSpecification(searchCriteria, authentication.name), PageRequest.of(page, size)).let {
                 println(authentication.authorities)
                 val posts = Posts(
                         totalCount = it.totalElements,

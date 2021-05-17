@@ -10,7 +10,7 @@ import javax.persistence.criteria.Root
 
 class PostSpecification(
         private val searchCriteria: SearchCriteria?,
-        private val authentication: Authentication
+        private val email: String
 ) : Specification<PostEntity> {
     override fun toPredicate(root: Root<PostEntity>, cq: CriteriaQuery<*>, cb: CriteriaBuilder): Predicate? {
         val predicates = mutableListOf<Predicate>()
@@ -44,7 +44,7 @@ class PostSpecification(
             }
             val userJoin = root.join<PostEntity, UserEntity>("user")
             predicates.add(
-                    cb.notEqual(userJoin.get<String>("email"), authentication.name as String)
+                    cb.notEqual(userJoin.get<String>("email"),email )
             )
         }
         return cb.and(*predicates.toTypedArray())
