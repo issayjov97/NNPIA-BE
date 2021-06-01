@@ -6,7 +6,7 @@ create table if not exists users(
     lastname varchar(100) not null,
     email varchar(100) not null unique,
     enabled boolean not null default true,
-    rating number not null default true,
+    rating integer not null default true,
     skill_hours_id integer not  null ,
     constraint fk_skill_hours foreign key(skill_hours_id) references skill_hours(id)
     );
