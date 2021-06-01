@@ -7,7 +7,10 @@ spring:
   jpa:
     open-in-view: false
     properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
       hibernate.format_sql: true
+    database-platform: org.
+
 logging:
   level:
     web: DEBUG
