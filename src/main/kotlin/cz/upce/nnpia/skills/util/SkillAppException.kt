@@ -1,6 +1,10 @@
 package cz.upce.nnpia.skills.util
 
-class SkillAppException: RuntimeException {
-    constructor(message: String?) : super(message)
-    constructor(message: String?, cause: Throwable?) : super(message, cause)
+import org.springframework.http.HttpStatus
+
+class SkillAppException(
+        val content: String?,
+        val status: HttpStatus,
+        val ex: Throwable? = null
+) : RuntimeException(content) {
 }

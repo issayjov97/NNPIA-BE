@@ -13,12 +13,12 @@ class UserEntity(
         val username: String,
         var password: String,
         val enabled: Boolean = true,
-        val firstname: String,
-        val lastname: String,
+        var firstname: String,
+        var lastname: String,
         val email: String,
-        val rating: Int = 0,
+        var rating: Int = 0,
         @OneToOne(cascade = [CascadeType.ALL],
-                fetch = FetchType.LAZY, optional = false)
+                fetch = FetchType.EAGER, optional = false)
         @JoinColumn(name = "skill_hours_id")
         val skillHoursEntity: SkillHoursEntity,
 
@@ -45,17 +45,19 @@ class PostEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
-        val title: String,
+        var title: String,
         @Enumerated(EnumType.STRING)
         val type: Type,
-        val description: String,
-        val details: String? = null,
+        var description: String,
+        var details: String? = null,
         @ManyToOne
         @JoinColumn(name = "category_id")
         val category: CategoryEntity,
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "user_id")
-        val user: UserEntity
+        val user: UserEntity,
+        @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+        val transactions: List<TransactionsEntity> = mutableListOf()
 
 )
 
@@ -111,30 +113,31 @@ data class TransactionsEntity(
         @Enumerated(EnumType.STRING)
         var status: TransactionState,
 
-        @OneToOne(fetch = FetchType.LAZY)
+        @OneToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "author")
         val user: UserEntity,
-        @OneToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "post_id")
         val post: PostEntity
 )
-
 
 @Entity
 @Table(name = "wishlist")
 data class WishListEntity(
         @EmbeddedId
-        val id: WishListId
+        val id: WishListId,
 
+        @ManyToOne
+        @JoinColumn(name = "post_id",insertable = false, updatable = false)
+        val post: PostEntity? = null
 )
 
 @Embeddable
 data class WishListId(
         @Column(name = "user_id")
         val userId: Long,
-        @ManyToOne
-        @JoinColumn(name = "post_id")
-        val post: PostEntity
+        @Column(name = "post_id")
+        val postId: Long
 ) : Serializable
 
 enum class Type {

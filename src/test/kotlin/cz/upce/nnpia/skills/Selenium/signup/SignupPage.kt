@@ -12,8 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest
-@ActiveProfiles("test")
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.DEFINED_PORT)
 class SignupPage {
 
     private lateinit var webDriver: WebDriver
@@ -44,32 +43,38 @@ class SignupPage {
 
         val firstname = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='firstname']")))
         firstname.clear()
-        firstname.sendKeys("tester2")
+        firstname.sendKeys("tester")
 
         val lastname = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='lastname']")))
         lastname.clear()
-        lastname.sendKeys("tester2")
+        lastname.sendKeys("tester")
 
         val username = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='username']")))
         username.clear()
-        username.sendKeys("tester12")
+        username.sendKeys("tester")
 
         val email = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='email']")))
         email.clear()
-        email.sendKeys("tester12")
+        email.sendKeys("tester@tester.cz")
 
         val password = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='password']")))
         password.clear()
-        password.sendKeys("tester1")
+        password.sendKeys("testerdf")
 
         val cpPassword = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='cpPassword']")))
         cpPassword.clear()
-        cpPassword.sendKeys("tester1")
+        cpPassword.sendKeys("testerdf")
 
         loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='signup']")))
         loginButton.submit()
 
+        wait.until(ExpectedConditions.alertIsPresent())
+
+        webDriver.switchTo().alert().accept();
+
+
         wait.until(ExpectedConditions.urlContains("$baseUrl/login"))
+
 
         Assertions.assertEquals("$baseUrl/login", webDriver.currentUrl)
 

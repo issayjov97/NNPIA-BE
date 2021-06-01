@@ -22,8 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import  org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
-@SpringBootTest(classes = [SpringSecurityTestConfig::class],
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = [SpringSecurityTestConfig::class])
 
 @AutoConfigureMockMvc
 @ActiveProfiles("test")

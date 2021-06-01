@@ -5,6 +5,17 @@ spring:
     default-property-inclusion: NON_EMPTY
     visibility:
       FIELD: any
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: goldenglory724@gmail.com
+    password: vepfxberxuxomlgg
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 logging:
   pattern:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint} %clr(---){faint} %clr([%8.15t]){cyan} %clr(%-40.40logger{0}){blue} %clr(:){red} %X{traceId}%clr(%m){faint}%n"

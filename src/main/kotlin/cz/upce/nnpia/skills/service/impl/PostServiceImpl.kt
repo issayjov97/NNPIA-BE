@@ -1,10 +1,14 @@
 package cz.upce.nnpia.skills.service.impl
 
-import cz.upce.nnpia.skills.api.*
+import cz.upce.nnpia.skills.api.Post
+import cz.upce.nnpia.skills.api.Posts
+import cz.upce.nnpia.skills.api.SearchCriteria
+import cz.upce.nnpia.skills.api.toPost
 import cz.upce.nnpia.skills.persistence.*
 import cz.upce.nnpia.skills.service.PostService
 import cz.upce.nnpia.skills.util.SkillAppException
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,16 +20,35 @@ class PostServiceImpl(
         private val userRepository: UserRepository
 ) : PostService {
     override fun createPost(post: Post) {
-        val userEntity = userRepository.findByEmail(post.author.username)//TODO zmenit client id
-                ?: throw SkillAppException("User not found")
-        val categoryEntity = categoryRepository.findByName(post.category.name!!);
+        val userEntity = userRepository.findByEmail(post.author!!.username)
+                ?: throw SkillAppException("User was not found", HttpStatus.NOT_FOUND)
+        val categoryEntity = categoryRepository.findByName(post.category?.name!!);
         postRepository.save(
-                post.toPostEntity(categoryEntity, userEntity)
+                PostEntity(
+                        title = post.title!!,
+                        type = post.type!!,
+                        description = post.description!!,
+                        details = post.details,
+                        category = categoryEntity,
+                        user = userEntity
+                )
         )
     }
 
-    override fun updatePost(post: Post) {
-        TODO("Not yet implemented")
+    override fun updatePost(id: Long, post: Post) {
+        val postEntity = postRepository.findById(id).orElseThrow {
+            throw SkillAppException("Post does not exist", HttpStatus.NOT_FOUND)
+        }
+        post.title?.let {
+            postEntity.title = it
+        }
+        post.description?.let {
+            postEntity.description = it
+        }
+        post.details?.let {
+            postEntity.details = it
+        }
+        postRepository.saveAndFlush(postEntity)
     }
 
     override fun deletePost(postId: Long) = postRepository.deleteById(postId)
@@ -36,26 +59,20 @@ class PostServiceImpl(
             size: Int,
             searchCriteria: SearchCriteria?,
             authentication: Authentication
-    ) = postRepository.findAll(PostSpecification(searchCriteria, authentication.name), PageRequest.of(page, size)).let {
-                println(authentication.authorities)
-                val posts = Posts(
-                        totalCount = it.totalElements,
-                        posts = it.content.map { it.toPost() }
-                )
-                posts
-            }
-
-
-    override fun getPosts(type: Type) = postRepository.findByType(type)?.map { it.toPost() }
-            ?: throw SkillAppException("Nothing was found")
+    ) = postRepository.findAll(PostSpecification(searchCriteria, authentication.principal as String), PageRequest.of(page, size)).let {
+        val posts = Posts(
+                totalCount = it.totalElements,
+                posts = it.content.map { it.toPost() }
+        )
+        posts
+    }
 
     override fun getPosts(email: String) = postRepository.findByUsername(email).map { it.toPost() }
-
 
     @Transactional(readOnly = true)
     override fun getPost(postId: Long) = postRepository.findById(postId).map {
         it.toPost()
-    }.orElseThrow { throw SkillAppException("Nothing was found") }
+    }.orElseThrow { throw SkillAppException("Nothing was found", HttpStatus.NOT_FOUND) }
 }
 
 
