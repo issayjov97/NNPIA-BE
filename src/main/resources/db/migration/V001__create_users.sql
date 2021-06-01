@@ -1,4 +1,4 @@
-create table if not exists talent_exchange.users(
+create table if not exists users(
     id  SERIAL PRIMARY KEY,
     username varchar(50) not null unique,
     password varchar(100) not null,
@@ -8,5 +8,5 @@ create table if not exists talent_exchange.users(
     enabled boolean not null default true,
     rating number not null default true,
     skill_hours_id integer not  null ,
-    constraint fk_skill_hours foreign key(skill_hours_id) references talent_exchange.skill_hours(id)
+    constraint fk_skill_hours foreign key(skill_hours_id) references skill_hours(id)
     );
