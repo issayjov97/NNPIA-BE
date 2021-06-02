@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
 )
+@ActiveProfiles("test")
 class LoginPage {
     private lateinit var webDriver: WebDriver
     private lateinit var wait: WebDriverWait
