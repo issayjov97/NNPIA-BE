@@ -27,7 +27,7 @@ It's all free, you just "pay" with your time.
 * [POST]/api/v1/transactions - create new transaction (user request, who is interested in some skills to share or get)
 * [GET]/api/v1/transactions - return transactions
 * [PUT]/api/v1/transactions - update transaction state
-* [POSR]/api/v1/users/password - change user password
+* [POST]/api/v1/users/password - change user password
 * [PUT]/api/v1/users/info - update user's information
 * [POST]/api/v1/users/wishlist - add post to user's wishlist
 * [GET]/api/v1/users/wishlist - return user's wishlist
