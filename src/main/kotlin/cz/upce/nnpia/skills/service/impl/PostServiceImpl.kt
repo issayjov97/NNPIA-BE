@@ -10,6 +10,7 @@ import cz.upce.nnpia.skills.util.SkillAppException
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -59,7 +60,13 @@ class PostServiceImpl(
             size: Int,
             searchCriteria: SearchCriteria?,
             authentication: Authentication
-    ) = postRepository.findAll(PostSpecification(searchCriteria, authentication.principal as String), PageRequest.of(page, size)).let {
+    ) = postRepository.findAll(
+            PostSpecification(
+                    searchCriteria = searchCriteria,
+                    email = if (authentication.principal is User) (authentication.principal as User).username else authentication.principal as String
+            ),
+            PageRequest.of(page, size)
+    ).let {
         val posts = Posts(
                 totalCount = it.totalElements,
                 posts = it.content.map { it.toPost() }
