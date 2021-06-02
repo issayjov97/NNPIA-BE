@@ -4,11 +4,13 @@ import cz.upce.nnpia.skills.api.AuthenticationRequest
 import cz.upce.nnpia.skills.api.SignupRequest
 import cz.upce.nnpia.skills.api.User
 import cz.upce.nnpia.skills.auth.JwtTokenProvider
+import cz.upce.nnpia.skills.auth.SkillsAppUser
 import cz.upce.nnpia.skills.persistence.SkillHoursEntity
 import cz.upce.nnpia.skills.persistence.UserEntity
 import cz.upce.nnpia.skills.persistence.UserRepository
 import cz.upce.nnpia.skills.service.AuthService
 import cz.upce.nnpia.skills.util.SkillAppException
+import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -24,20 +26,26 @@ class AuthServiceImpl(
 ) : AuthService {
     @Transactional(readOnly = true)
     override fun login(request: AuthenticationRequest): User {
-        authenticationManager.authenticate(UsernamePasswordAuthenticationToken(request.email, request.password))
-                ?: throw SkillAppException("Invalid email or password")
-        val userEntity = userRepository.findByUsername(request.email) ?: throw SkillAppException("User not found")
-        val token = jwtTokenProvider.createToken(userEntity.username, mutableListOf())
+        val skillsAppUser = authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(request.email, request.password)
+        ).principal as SkillsAppUser
+
+        val token = jwtTokenProvider.createToken(
+                username = skillsAppUser.username,
+                roles = skillsAppUser.authorities.map {
+                    it.authority
+                }.toSet()
+        )
         return User(
-                username = userEntity.email,
+                username = skillsAppUser.email,
                 token = token,
-                firstname = userEntity.firstname,
-                lastname = userEntity.lastname,
-                rating = userEntity.rating,
-                earned = userEntity.skillHoursEntity.earned,
-                available = userEntity.skillHoursEntity.available,
-                used = userEntity.skillHoursEntity.used,
-                authorities = userEntity.authorities.map { it.authority }
+                firstname = skillsAppUser.firstname,
+                lastname = skillsAppUser.lastname,
+                rating = skillsAppUser.rating,
+                earned = skillsAppUser.skillHoursEntity.earned,
+                available = skillsAppUser.skillHoursEntity.available,
+                used = skillsAppUser.skillHoursEntity.used,
+                authorities = skillsAppUser.authorities.map { it.authority }
         )
     }
 
@@ -45,7 +53,7 @@ class AuthServiceImpl(
     override fun signup(request: SignupRequest) {
         val userEntity = userRepository.findByUsername(request.username)
         userEntity?.let {
-            throw SkillAppException("Username already exists")
+            throw SkillAppException("Username already exists", HttpStatus.BAD_REQUEST)
         }
         userRepository.save(
                 UserEntity(

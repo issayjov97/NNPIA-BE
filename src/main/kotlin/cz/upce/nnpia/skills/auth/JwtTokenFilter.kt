@@ -1,9 +1,10 @@
 package cz.upce.nnpia.skills.auth
 
-import org.springframework.http.HttpStatus
+import cz.upce.nnpia.skills.util.SkillAppException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import javax.annotation.PostConstruct
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse
 class JwtTokenFilter(
         val jwtTokenProvider: JwtTokenProvider
 ) : OncePerRequestFilter() {
+
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         try {
             val token = jwtTokenProvider.resolveToken(request)
@@ -23,8 +25,7 @@ class JwtTokenFilter(
             }
         } catch (ex: JwtAuthenticationException) {
             SecurityContextHolder.clearContext()
-            response.sendError(ex.status.value())
-            throw JwtAuthenticationException(ex.status, ex.message, ex)
+            throw SkillAppException("JWT token is expired", ex.status)
         }
         filterChain.doFilter(request, response)
     }

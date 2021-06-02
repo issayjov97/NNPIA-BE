@@ -1,7 +1,5 @@
 package cz.upce.nnpia.skills.persistence
 
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Query
@@ -13,7 +11,12 @@ import javax.persistence.criteria.Root
 
 
 interface UserRepository : JpaRepository<UserEntity, Long> {
+    @Query("from UserEntity user " +
+            "left join fetch user.authorities " +
+            "left join fetch user.skillHoursEntity " +
+            "where user.username = ?1")
     fun findByUsername(username: String): UserEntity?
+
     fun findByEmail(email: String): UserEntity?
 
 }
@@ -24,15 +27,8 @@ interface PostRepository : JpaRepository<PostEntity, Long>, JpaSpecificationExec
     @Query("from PostEntity p" +
             " inner join p.category c" +
             " inner join p.user u" +
-            " where u.email = ?1")
-    fun findByUsername(username: String): List<PostEntity>
-
-    @Query("from PostEntity p" +
-            " inner join p.category c" +
-            " inner join p.user u" +
             " where u.email <> ?1")
-    fun findByUsername(username: String, pageable: Pageable): Page<PostEntity>
-
+    fun findByUsername(username: String): List<PostEntity>
 }
 
 interface CategoryRepository : JpaRepository<CategoryEntity, Long> {
@@ -47,6 +43,10 @@ interface TransactionRepository : JpaRepository<TransactionsEntity, Long>, Custo
 
 interface CustomTransactionRepository {
     fun findTransactions(username: String, status: TransactionState?): List<TransactionsEntity>
+}
+
+interface WishListRepository : JpaRepository<WishListEntity, WishListId>{
+    fun findByIdUserId(userId: Long): List<WishListEntity>
 }
 
 @Repository

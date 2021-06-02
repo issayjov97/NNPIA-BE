@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/skill?currentSchema=talent_exchange
-    username: skill
-    password: skill
+    url:
+    username:
+    password:
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: false

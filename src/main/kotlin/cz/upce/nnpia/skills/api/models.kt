@@ -1,6 +1,7 @@
 package cz.upce.nnpia.skills.api
 
 import cz.upce.nnpia.skills.persistence.*
+import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 
 data class AuthenticationRequest(
@@ -17,7 +18,7 @@ data class User(
         val rating: Int,
         val available: Int,
         val earned: Int,
-        val used: Int,
+        val used: Int
 )
 
 data class SignupRequest(
@@ -30,12 +31,12 @@ data class SignupRequest(
 
 data class Post(
         val id: Long? = null,
-        val title: String,
-        val type: Type,
-        val description: String,
+        val title: String? = null,
+        val type: Type? = null,
+        val description: String? = null,
         val details: String? = null,
-        val category: Category,
-        val author: Author
+        val category: Category? = null,
+        val author: Author? = null
 )
 
 data class Author(
@@ -69,15 +70,22 @@ data class SearchCriteria(
         val type: Type? = null
 )
 
+data class ChangeUserInfoRequest(
+        val firstname: String? = null,
+        val lastname: String? = null,
+        val location: String? = null
+)
+
 data class ChangePasswordRequest(
         val currentPassword: String,
         val newPassword: String
 )
 
+
 data class TransactionResponseApi(
         val id: Long? = null,
 
-        val requestedAt: LocalDateTime,
+        val requestedAt: LocalDateTime? = null,
 
         val approvedByAuthorAt: LocalDateTime? = null,
 
@@ -89,11 +97,11 @@ data class TransactionResponseApi(
 
         val agreedSkillHours: Int? = null,
 
-        val status: TransactionState,
+        val status: TransactionState? = null,
 
-        val user: Author,
+        val user: Author? = null,
 
-        val post: Post
+        val post: Post? = null
 )
 
 data class TransactionRequestApi(
@@ -138,16 +146,4 @@ fun TransactionsEntity.toTransaction() = TransactionResponseApi(
         status = status,
         user = user.toAuthor(),
         post = post.toPost()
-)
-
-fun Post.toPostEntity(
-        categoryEntity: CategoryEntity,
-        userEntity: UserEntity
-) = PostEntity(
-        title = title,
-        type = type,
-        description = description,
-        details = details,
-        category = categoryEntity,
-        user = userEntity
 )
