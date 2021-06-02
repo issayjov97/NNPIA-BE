@@ -4,3 +4,10 @@ jdk:
 env:
   global:
       - SPRING_ACTIVE_PROFILES='test'
+deploy:
+  provider: heroku
+  api_key:
+    secure: 90dcf835-019f-4c5d-88c9-66f79b278605
+  app: nnpia-skillsap-be
+  on:
+    repo: issayjov97/nnpia-be-spring-boot
