@@ -1,6 +1,9 @@
 language: java
 jdk:
 - openjdk11
+sudo: required
+addons:
+  chrome: stable
 env:
   global:
   - SPRING_ACTIVE_PROFILES='test'
