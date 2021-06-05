@@ -1,13 +1,13 @@
 language: java
 jdk:
-- openjdk11
+  - openjdk11
 env:
   global:
-  - SPRING_ACTIVE_PROFILES='test'
+    - SPRING_ACTIVE_PROFILES='test'
 deploy:
   provider: heroku
   api_key:
     secure: SLBUR5O7CywrmozU72ANgNcF7l+tty9V3bXRgBKVYnRLt8YcYjd9Vga8t7rc4PfOE4r6MJ21LlPFvjqxpwQRpZiuoBW0Ppl1rRdUt08X4qKQEnT05uXtzBBhh7hbGFW0/KtBY7FdDsuRcTwRy7bdPQFeBYbgNTZ+BgY+aq1w2KYV5QbzgzeVWZCy3EgOC8cToL/ok9URwlGeviCOghRTkEs4aqA1kHNJZXCRT1GZrR8yH0mdZ4yPovyDst3XI3P2yLKIC4eHePSqK2hnxQuffyKwdcQXrXf7zFsmrhrPnbmf3EBMpdW5ZwJMCkDTrEFLKnRoGxnvN/fZpSeNIC3Qpj/X6U3NgoR3KLW+d4f+PkoKLQykgxZQTZXCiMFVsxj5+Nnz02JY3dTCDca0UwWvo5cKfkH87jmKnQdFGECZIAcvWgdaSLbgmDySGP+NB1kl5jSiiAhh6eYY8UXa39DxzpGsr5HwDYbkvMwzYkaTA2JgUEhiSTogLd7BdyJ3ss30xOFIBExOjSnsfj2+v7op7TSFl5SZCVXT93zNFRAGsFjnzvLOx4YYFpxxp5gGS+sImZzQWScB1mxnsT3+Tc3DwS9A3JK4wg7Mx5b9Eh8upsHGQCvWnPsr3DQAq5lR6qrpBda0TysNAEsLE+XyOQXqAl11JF+qj20al5Wh2EWbgqk=
   app: nnpia-skillsap-be
-  on:
+  true:
     repo: issayjov97/nnpia-be-spring-boot

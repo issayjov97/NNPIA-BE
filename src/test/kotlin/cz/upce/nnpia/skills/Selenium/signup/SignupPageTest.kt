@@ -1,4 +1,4 @@
-package cz.upce.nnpia.skills.Selenium.login
+package cz.upce.nnpia.skills.Selenium.signup
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -12,11 +12,10 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
-)
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-class LoginPage {
+class SignupPageTest {
+
     private lateinit var webDriver: WebDriver
     private lateinit var wait: WebDriverWait
 
@@ -38,45 +37,45 @@ class LoginPage {
     }
 
     @Test
-    internal fun shouldSuccessfullyLogin() {
+    internal fun shouldSuccessfullySignUp() {
         webDriver.get("$baseUrl/skills")
-        var loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='login']")))
+        var loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='signup']")))
         loginButton.click()
+
+        val firstname = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='firstname']")))
+        firstname.clear()
+        firstname.sendKeys("tester")
+
+        val lastname = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='lastname']")))
+        lastname.clear()
+        lastname.sendKeys("tester")
+
+        val username = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='username']")))
+        username.clear()
+        username.sendKeys("tester")
 
         val email = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='email']")))
         email.clear()
-        email.sendKeys("user1")
+        email.sendKeys("tester@tester.cz")
 
         val password = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='password']")))
         password.clear()
-        password.sendKeys("275822df")
+        password.sendKeys("testerdf")
 
-        loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='login']")))
+        val cpPassword = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='cpPassword']")))
+        cpPassword.clear()
+        cpPassword.sendKeys("testerdf")
+
+        loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='signup']")))
         loginButton.submit()
 
-        wait.until(ExpectedConditions.urlContains("$baseUrl/skills"))
+        wait.until(ExpectedConditions.alertIsPresent())
 
-        Assertions.assertEquals("$baseUrl/skills", webDriver.currentUrl)
-    }
+        webDriver.switchTo().alert().accept();
 
-    @Test
-    internal fun shouldNotSuccessfullyLogin() {
-        webDriver.get("$baseUrl/skills")
-        var loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='login']")))
-        loginButton.click()
-
-        val email = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='email']")))
-        email.clear()
-        email.sendKeys("failed")
-
-        val password = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='password']")))
-        password.clear()
-        password.sendKeys("failed")
-
-        loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='login']")))
-        loginButton.submit()
 
         wait.until(ExpectedConditions.urlContains("$baseUrl/login"))
+
 
         Assertions.assertEquals("$baseUrl/login", webDriver.currentUrl)
 
