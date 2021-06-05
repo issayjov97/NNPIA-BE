@@ -1,9 +1,9 @@
 language: java
 jdk:
-  - openjdk11
+- openjdk11
 env:
   global:
-    - SPRING_ACTIVE_PROFILES='test'
+  - SPRING_ACTIVE_PROFILES='test'
 deploy:
   provider: heroku
   api_key:
