@@ -23,7 +23,6 @@ class LoginPageTest {
     internal fun setUp() {
         WebDriverManager.chromedriver().setup();
         webDriver = ChromeDriver()
-        webDriver.manage().window().maximize()
         wait = WebDriverWait(webDriver, 10)
     }
 
