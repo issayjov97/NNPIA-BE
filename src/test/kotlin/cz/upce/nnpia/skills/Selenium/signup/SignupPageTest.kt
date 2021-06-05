@@ -35,7 +35,7 @@ class SignupPageTest {
         options.addArguments("--disable-dev-shm-usage")
         options.addArguments("--headless")
         webDriver = ChromeDriver(options)
-        wait = WebDriverWait(webDriver, 30)
+        wait = WebDriverWait(webDriver, 50)
     }
 
     @AfterEach
