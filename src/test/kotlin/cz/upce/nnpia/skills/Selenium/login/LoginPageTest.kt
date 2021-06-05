@@ -10,6 +10,10 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
+import org.openqa.selenium.chrome.ChromeOptions
+
+
+
 
 class LoginPageTest {
     private lateinit var webDriver: WebDriver
@@ -21,8 +25,12 @@ class LoginPageTest {
 
     @BeforeEach
     internal fun setUp() {
-        WebDriverManager.chromedriver().setup();
-        webDriver = ChromeDriver()
+        WebDriverManager.chromedriver().setup()
+        val options = ChromeOptions()
+        options.addArguments("--no-sandbox")
+        options.addArguments("--disable-dev-shm-usage")
+        options.addArguments("--headless")
+        webDriver = ChromeDriver(options)
         wait = WebDriverWait(webDriver, 10)
     }
 

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.boot.test.context.SpringBootTest
@@ -24,8 +25,12 @@ class SignupPageTest {
 
     @BeforeEach
     internal fun setUp() {
-        WebDriverManager.chromedriver().setup();
-        webDriver = ChromeDriver()
+        WebDriverManager.chromedriver().setup()
+        val options = ChromeOptions()
+        options.addArguments("--no-sandbox")
+        options.addArguments("--disable-dev-shm-usage")
+        options.addArguments("--headless")
+        webDriver = ChromeDriver(options)
         wait = WebDriverWait(webDriver, 10)
     }
 
@@ -58,11 +63,11 @@ class SignupPageTest {
 
         val password = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='password']")))
         password.clear()
-        password.sendKeys("tester")
+        password.sendKeys("tester1234")
 
         val cpPassword = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='cpPassword']")))
         cpPassword.clear()
-        cpPassword.sendKeys("tester")
+        cpPassword.sendKeys("tester1234")
 
         loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='signup']")))
         loginButton.submit()
