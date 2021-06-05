@@ -14,6 +14,10 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
+@ActiveProfiles("test")
 class SignupPageTest {
 
     private lateinit var webDriver: WebDriver
@@ -31,7 +35,7 @@ class SignupPageTest {
         options.addArguments("--disable-dev-shm-usage")
         options.addArguments("--headless")
         webDriver = ChromeDriver(options)
-        wait = WebDriverWait(webDriver, 10)
+        wait = WebDriverWait(webDriver, 30)
     }
 
     @AfterEach

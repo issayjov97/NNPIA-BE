@@ -31,7 +31,7 @@ class LoginPageTest {
         options.addArguments("--disable-dev-shm-usage")
         options.addArguments("--headless")
         webDriver = ChromeDriver(options)
-        wait = WebDriverWait(webDriver, 10)
+        wait = WebDriverWait(webDriver, 30)
     }
 
     @AfterEach
