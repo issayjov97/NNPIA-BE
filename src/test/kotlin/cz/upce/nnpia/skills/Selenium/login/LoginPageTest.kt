@@ -1,5 +1,6 @@
 package cz.upce.nnpia.skills.Selenium.login
 
+import io.github.bonigarcia.wdm.WebDriverManager
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -9,24 +10,18 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
-)
-@ActiveProfiles("test")
 class LoginPageTest {
     private lateinit var webDriver: WebDriver
     private lateinit var wait: WebDriverWait
 
     companion object {
-        const val baseUrl = "http://localhost:4200"
+        const val baseUrl = "https://nnpia-skillsap-fe.herokuapp.com"
     }
 
     @BeforeEach
     internal fun setUp() {
-        System.setProperty("webdriver.chrome.driver", "/home/debian/Downloads/chromedriver_linux64/chromedriver")
+        WebDriverManager.chromedriver().setup();
         webDriver = ChromeDriver()
         webDriver.manage().window().maximize()
         wait = WebDriverWait(webDriver, 10)
@@ -45,11 +40,11 @@ class LoginPageTest {
 
         val email = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='email']")))
         email.clear()
-        email.sendKeys("user1")
+        email.sendKeys("st55409@upce.cz")
 
         val password = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='password']")))
         password.clear()
-        password.sendKeys("275822df")
+        password.sendKeys("275822dd")
 
         loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='login']")))
         loginButton.submit()
