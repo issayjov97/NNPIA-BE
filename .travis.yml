@@ -7,6 +7,7 @@ addons:
 env:
   global:
   - SPRING_ACTIVE_PROFILES='test'
+  - CODECOV_TOKEN='2d2c472c-14a1-43aa-85a9-e2e0a2311d5c'
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 deploy:
