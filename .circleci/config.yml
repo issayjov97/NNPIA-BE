@@ -15,8 +15,8 @@ jobs:
       - run:
           name: Chrome driver
           command: |
-       chmod +x ./scripts/InstallChrome.sh
-        ./scripts/InstallChrome.sh
+            chmod +x ./scripts/InstallChrome.sh
+            ./scripts/InstallChrome.sh
       - run:
           name: Build
           command: mvn -B -DskipTests clean package
