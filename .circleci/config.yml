@@ -12,18 +12,11 @@ jobs:
     docker:
       - image: cimg/openjdk:11.0.8-browsers
     steps:
-      - checkout
-      - run: mkdir test-reports
       - run:
-          name: Download Selenium
+          name: Chrome driver
           command: |
-            curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
-      - run:
-          name: Start Selenium
-          command: |
-            java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
-          background: true
-
+       chmod +x ./scripts/InstallChrome.sh
+        ./scripts/InstallChrome.sh
       - run:
           name: Build
           command: mvn -B -DskipTests clean package
