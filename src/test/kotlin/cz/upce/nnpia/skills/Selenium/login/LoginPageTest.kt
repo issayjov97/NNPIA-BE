@@ -11,8 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.chrome.ChromeOptions
-
-
+import java.io.File
 
 
 class LoginPageTest {
@@ -27,9 +26,11 @@ class LoginPageTest {
     internal fun setUp() {
         WebDriverManager.chromedriver().setup()
         val options = ChromeOptions()
-        options.addArguments("--no-sandbox")
-        options.addArguments("--disable-dev-shm-usage")
-        options.addArguments("--headless")
+        options.setHeadless(true)
+        val circleCIChromedriverPath = "/usr/local/bin/chromedriver"
+        if (File(circleCIChromedriverPath).exists()) {
+            System.setProperty("webdriver.chrome.driver", circleCIChromedriverPath);
+        }
         webDriver = ChromeDriver(options)
         wait = WebDriverWait(webDriver, 50)
     }
