@@ -27,6 +27,9 @@ class LoginPageTest {
     internal fun setUp() {
         WebDriverManager.chromedriver().setup()
         val options = ChromeOptions()
+        options.addArguments("--no-sandbox")
+        options.addArguments("--disable-dev-shm-usage")
+        options.addArguments("--headless")
         webDriver = ChromeDriver(options)
         wait = WebDriverWait(webDriver, 50)
     }
