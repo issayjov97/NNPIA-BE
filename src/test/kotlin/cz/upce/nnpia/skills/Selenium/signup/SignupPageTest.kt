@@ -31,9 +31,11 @@ class SignupPageTest {
     internal fun setUp() {
         WebDriverManager.chromedriver().setup()
         val options = ChromeOptions()
-        options.addArguments("--no-sandbox")
-        options.addArguments("--disable-dev-shm-usage")
-        options.addArguments("--headless")
+         options.setHeadless(true)
+        val circleCIChromedriverPath = "/usr/local/bin/chromedriver"
+        if (File(circleCIChromedriverPath).exists()) {
+            System.setProperty("webdriver.chrome.driver", circleCIChromedriverPath);
+        }
         webDriver = ChromeDriver(options)
         wait = WebDriverWait(webDriver, 50)
     }
