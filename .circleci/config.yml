@@ -12,6 +12,7 @@ jobs:
     docker:
       - image: cimg/openjdk:11.0.8-browsers
     steps:
+      - checkout
       - run:
           name: Chrome driver
           command: |
