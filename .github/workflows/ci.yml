@@ -33,4 +33,11 @@ jobs:
       
     - name: Maven Verify
       run: mvn -B clean verify
-    
+      
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: Tests
+        path: target/surefire-reports/TEST-*.xml
+        reporter: java-junit
