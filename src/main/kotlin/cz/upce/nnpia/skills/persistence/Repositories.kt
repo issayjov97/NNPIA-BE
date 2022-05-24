@@ -27,7 +27,7 @@ interface PostRepository : JpaRepository<PostEntity, Long>, JpaSpecificationExec
     @Query("from PostEntity p" +
             " inner join p.category c" +
             " inner join p.user u" +
-            " where u.email <> ?1")
+            " where u.email = ?1")
     fun findByUsername(username: String): List<PostEntity>
 }
 
